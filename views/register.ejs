@@ -1,0 +1,114 @@
+<%- include('partials/header') %>
+
+<div class="container mt-5">
+  <h1>Register</h1>
+
+  <div class="row">
+    <div class="col-sm-8">
+      <div class="card">
+        <div class="card-body">
+          <!-- Makes POST request to /register route -->
+          <form id="registerForm" action="/register" method="POST">
+
+            <div class="form-group mb-3">
+              <label for="username">Name</label>
+              <input type="text" class="form-control" name="username" id="username" required>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="password">Password</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" required>
+                <button type="button" class="btn btn-outline-secondary" id="togglePassword" style="width: 70px;">
+                  Show
+                </button>
+              </div>
+              <div class="form-text">
+                Your password must contain:
+              </div>
+                <ul class="small">
+                  <li id="lowercase" class="invalid">At least one lowercase letter</li>
+                  <li id="uppercase" class="invalid">At least one uppercase letter</li>
+                  <li id="number" class="invalid">At least one number</li>
+                  <li id="length" class="invalid">6–8 characters long</li>
+                </ul>
+              
+            </div>
+
+            <button type="submit" class="btn btn-dark">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<style>
+  .valid { color: green; }
+  .invalid { color: red; }
+</style>
+<script>
+
+
+  const passwordInput = document.getElementById('password');
+  const lowercase = document.getElementById('lowercase');
+  const uppercase = document.getElementById('uppercase');
+  const number = document.getElementById('number');
+  const length = document.getElementById('length');
+  const togglePassword = document.getElementById('togglePassword');
+
+  togglePassword.addEventListener('click',function(){
+    const type = passwordInput.getAttribute('type')==='password'? 'text':'password';
+    passwordInput.setAttribute('type',type);
+
+    this.textContent = type==="password"?"show":"hide";
+  })
+  
+  passwordInput.addEventListener('input', function() {
+    const value = passwordInput.value;
+
+    let isLower = /[a-z]/.test(value);
+    let isUpper = /[A-Z]/.test(value);
+    let isNumber = /[0-9]/.test(value);
+    let isLength = value.length >= 6 && value.length <= 8;
+
+    // Lowercase check
+    lowercase.classList.toggle('valid', isLower);
+    lowercase.classList.toggle('invalid', !isLower);
+
+    // Uppercase check
+    uppercase.classList.toggle('valid', isUpper);
+    uppercase.classList.toggle('invalid', !isUpper);
+
+    // Number check
+    number.classList.toggle('valid', isNumber);
+    number.classList.toggle('invalid', !isNumber);
+
+    // Length check
+    length.classList.toggle('valid', isLength);
+    length.classList.toggle('invalid', !isLength);
+
+    // Apply border highlight
+    if (isLower && isUpper && isNumber && isLength) {
+      passwordInput.classList.remove('is-invalid');
+      passwordInput.classList.add('is-valid');
+    } else {
+      passwordInput.classList.remove('is-valid');
+      passwordInput.classList.add('is-invalid');
+    }
+  });
+
+  // Prevent form submission if requirements not met
+  document.getElementById('registerForm').addEventListener('submit', function(e) {
+    if (document.querySelectorAll('.invalid').length > 0) {
+      e.preventDefault();
+      alert('Please meet all password requirements before registering.');
+    }
+  });
+</script>
+
+<%- include('partials/footer') %>

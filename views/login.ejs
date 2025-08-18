@@ -1,0 +1,49 @@
+<%- include ('partials/header') %>
+
+<div class="container mt-5 ">
+    <h1>Login</h1>
+  
+    <div class="row">
+      <div class="col-sm-8">
+        <div class="card">
+          <div class="card-body">
+  
+            <!-- Makes POST request to /login route -->
+            <form action="/login" method="POST">
+
+              <div class="form-group mb-3">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" id="email" required>
+              </div>
+  
+              <div class="form-group mb-3">
+                <label for="password">Password</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="password" name="password" required>
+                  <button type="button" class="btn btn-outline-secondary" id="togglePassword" style="width: 70px;">
+                    Show
+                  </button>
+                </div>
+              </div>
+  
+              <button type="submit" class="btn btn-dark">Login</button>
+            </form>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const passwordInput = document.getElementById('password');
+    const togglePassword = document.getElementById('togglePassword')
+    togglePassword.addEventListener('click',function(){
+    const type = passwordInput.getAttribute('type')==='password'? 'text':'password';
+    passwordInput.setAttribute('type',type);
+
+    this.textContent = type==="password"?"show":"hide";
+  })
+  </script>
+
+<%- include ('partials/footer') %>
